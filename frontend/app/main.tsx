@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from 'react'
 import ReactDOM from 'react-dom/client'
 import './index.css'
 import { Toaster, toast } from 'react-hot-toast'
+import { useLanguageStore } from '@/lib/i18n'
 
 // Create a module-level WebSocket singleton to avoid duplicate connections in React StrictMode
 let __WS_SINGLETON__: WebSocket | null = null;
@@ -53,9 +54,15 @@ interface Position { id: number; account_id: number; symbol: string; name: strin
 interface Order { id: number; order_no: string; symbol: string; name: string; market: string; side: string; order_type: string; price?: number; quantity: number; leverage: number; filled_quantity: number; status: string }
 interface Trade { id: number; order_id: number; account_id: number; symbol: string; name: string; market: string; side: string; price: number; quantity: number; commission: number; trade_time: string }
 
-const PAGE_TITLES: Record<string, string> = {
-  portfolio: 'Crypto Paper Trading',
-  comprehensive: 'Open Alpha Arena',
+const PAGE_TITLES: Record<string, Record<string, string>> = {
+  portfolio: {
+    en: 'Crypto Paper Trading',
+    zh: '加密货币模拟交易'
+  },
+  comprehensive: {
+    en: 'Open Alpha Arena',
+    zh: '开放阿尔法竞技场'
+  }
 }
 
 function App() {
@@ -72,6 +79,7 @@ function App() {
   const wsRef = useRef<WebSocket | null>(null)
   const [accounts, setAccounts] = useState<any[]>([])
   const [accountsLoading, setAccountsLoading] = useState<boolean>(true)
+  const { language, t } = useLanguageStore()
 
   useEffect(() => {
     let reconnectTimer: NodeJS.Timeout | null = null
@@ -117,21 +125,21 @@ function App() {
             } else if (msg.type === 'trades') {
               setTrades(msg.trades || [])
             } else if (msg.type === 'order_filled') {
-              toast.success('Order filled')
+              toast.success(t('messages.order_filled'))
               ws!.send(JSON.stringify({ type: 'get_snapshot' }))
             } else if (msg.type === 'order_pending') {
-              toast('Order placed, waiting for fill', { icon: '⏳' })
+              toast(t('messages.order_placed'), { icon: '⏳' })
               ws!.send(JSON.stringify({ type: 'get_snapshot' }))
             } else if (msg.type === 'user_switched') {
-              toast.success(`Switched to ${msg.user.username}`)
+              toast.success(`${t('messages.switched_user')} ${msg.user.username}`)
               setUser(msg.user)
             } else if (msg.type === 'account_switched') {
-              toast.success(`Switched to ${msg.account.name}`)
+              toast.success(`${t('messages.switched_account')} ${msg.account.name}`)
               setAccount(msg.account)
               refreshAccounts()
             } else if (msg.type === 'error') {
               console.error(msg.message)
-              toast.error(msg.message || 'Order error')
+              toast.error(msg.message || t('messages.order_error'))
             }
           } catch (err) {
             console.error('Failed to parse WebSocket message:', err)
@@ -212,45 +220,45 @@ function App() {
   const placeOrder = (payload: any) => {
     if (!wsRef.current || wsRef.current.readyState !== WebSocket.OPEN) {
       console.warn('WS not connected, cannot place order')
-      toast.error('Not connected to server')
+      toast.error(t('messages.not_connected'))
       return
     }
     try {
       wsRef.current.send(JSON.stringify({ type: 'place_order', ...payload }))
-      toast('Placing order...', { icon: '📝' })
+      toast(t('order_form.place_order') + '...', { icon: '📝' })
     } catch (e) {
       console.error(e)
-      toast.error('Failed to send order')
+      toast.error(t('messages.failed_send_order'))
     }
   }
 
   const switchUser = (username: string) => {
     if (!wsRef.current || wsRef.current.readyState !== WebSocket.OPEN) {
       console.warn('WS not connected, cannot switch user')
-      toast.error('Not connected to server')
+      toast.error(t('messages.not_connected'))
       return
     }
     try {
       wsRef.current.send(JSON.stringify({ type: 'switch_user', username }))
-      toast('Switching account...', { icon: '🔄' })
+      toast(t('auth.switch_user') + '...', { icon: '🔄' })
     } catch (e) {
       console.error(e)
-      toast.error('Failed to switch user')
+      toast.error(t('messages.failed_switch_user'))
     }
   }
 
   const switchAccount = (accountId: number) => {
     if (!wsRef.current || wsRef.current.readyState !== WebSocket.OPEN) {
       console.warn('WS not connected, cannot switch account')
-      toast.error('Not connected to server')
+      toast.error(t('messages.not_connected'))
       return
     }
     try {
       wsRef.current.send(JSON.stringify({ type: 'switch_account', account_id: accountId }))
-      toast('Switching account...', { icon: '🔄' })
+      toast(t('account_selector.switch_account') + '...', { icon: '🔄' })
     } catch (e) {
       console.error(e)
-      toast.error('Failed to switch account')
+      toast.error(t('messages.failed_switch_account'))
     }
   }
 
@@ -264,7 +272,7 @@ function App() {
     }
   }
 
-  if (!user || !account || !overview) return <div className="p-8">Connecting to trading server...</div>
+  if (!user || !account || !overview) return <div className="p-8">{t('messages.connecting')}</div>
 
   const renderMainContent = () => {
     const refreshData = () => {
@@ -313,7 +321,7 @@ function App() {
     )
   }
 
-  const pageTitle = PAGE_TITLES[currentPage] ?? PAGE_TITLES.portfolio
+  const pageTitle = PAGE_TITLES[currentPage]?.[language] ?? PAGE_TITLES.portfolio[language]
 
   return (
     <div className="h-screen flex overflow-hidden">

@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
-import { Moon, Sun } from 'lucide-react'
+import { Moon, Sun, Languages } from 'lucide-react'
 import { Button } from '@/components/ui/button'
+import { useLanguageStore } from '@/lib/i18n'
 
 interface User {
   id: number
@@ -30,6 +31,11 @@ export default function Header({ title = 'Crypto Paper Trading', currentUser, cu
     if (typeof document === 'undefined') return 'dark'
     return document.documentElement.classList.contains('dark') ? 'dark' : 'light'
   })
+  
+  const { language, setLanguage, t } = useLanguageStore()
+  
+  // Update title based on language
+  const localizedTitle = t('header.title')
 
   useEffect(() => {
     if (typeof window === 'undefined') return
@@ -53,22 +59,34 @@ export default function Header({ title = 'Crypto Paper Trading', currentUser, cu
       window.localStorage.setItem('theme', theme)
     }
   }, [theme])
-
+  
   const toggleTheme = () => {
     setTheme(prev => (prev === 'dark' ? 'light' : 'dark'))
+  }
+  
+  const toggleLanguage = () => {
+    setLanguage(language === 'en' ? 'zh' : 'en')
   }
 
   return (
     <header className="w-full border-b bg-background/50 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="w-full py-2 px-4 flex items-center justify-between">
-        <h1 className="text-xl font-bold">{title}</h1>
+        <h1 className="text-xl font-bold">{localizedTitle}</h1>
         
         <div className="flex items-center gap-4">
           <Button
             variant="ghost"
             size="icon"
+            onClick={toggleLanguage}
+            aria-label="Toggle language"
+          >
+            <Languages className="h-4 w-4" />
+          </Button>
+          <Button
+            variant="ghost"
+            size="icon"
             onClick={toggleTheme}
-            aria-label="Toggle theme"
+            aria-label={t('header.toggle_theme')}
           >
             {theme === 'dark' ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
           </Button>

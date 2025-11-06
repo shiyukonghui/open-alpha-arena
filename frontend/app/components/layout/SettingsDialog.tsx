@@ -19,6 +19,7 @@ import {
   type TradingAccountCreate,
   type TradingAccountUpdate
 } from '@/lib/api'
+import { useLanguageStore } from '@/lib/i18n'
 
 interface SettingsDialogProps {
   open: boolean
@@ -58,6 +59,8 @@ export default function SettingsDialog({ open, onOpenChange, onAccountUpdated }:
     base_url: '',
     api_key: 'default-key-please-update-in-settings',
   })
+  
+  const { t } = useLanguageStore()
 
   const loadAccounts = async () => {
     try {
@@ -66,7 +69,7 @@ export default function SettingsDialog({ open, onOpenChange, onAccountUpdated }:
       setAccounts(data)
     } catch (error) {
       console.error('Failed to load accounts:', error)
-      toast.error('Failed to load accounts')
+      toast.error(t('messages.failed_load_accounts'))
     } finally {
       setLoading(false)
     }
@@ -90,7 +93,7 @@ export default function SettingsDialog({ open, onOpenChange, onAccountUpdated }:
       setTestResult(null)
 
       if (!newAccount.name || !newAccount.name.trim()) {
-        setError('Account name is required')
+        setError(t('messages.account_required'))
         setLoading(false)
         setTesting(false)
         return
@@ -98,7 +101,7 @@ export default function SettingsDialog({ open, onOpenChange, onAccountUpdated }:
 
       // If AI fields are provided, test LLM connection first
       if (newAccount.model || newAccount.base_url || newAccount.api_key) {
-        setTestResult('Testing LLM connection...')
+        setTestResult(t('messages.testing_llm'))
         try {
           const testResponse = await testLLMConnection({
             model: newAccount.model,
@@ -106,18 +109,18 @@ export default function SettingsDialog({ open, onOpenChange, onAccountUpdated }:
             api_key: newAccount.api_key,
           })
           if (!testResponse.success) {
-            const message = testResponse.message || 'LLM connection test failed'
-            setError(`LLM Test Failed: ${message}`)
-            setTestResult(`❌ Test failed: ${message}`)
+            const message = testResponse.message || t('messages.test_failed')
+            setError(`${t('messages.test_failed')}: ${message}`)
+            setTestResult(`❌ ${t('messages.test_failed')}: ${message}`)
             setLoading(false)
             setTesting(false)
             return
           }
-          setTestResult('✅ LLM connection test passed! Creating account...')
+          setTestResult(`✅ ${t('messages.test_passed')} ${t('messages.creating_account')}...`)
         } catch (testError) {
-          const message = testError instanceof Error ? testError.message : 'LLM connection test failed'
-          setError(`LLM Test Failed: ${message}`)
-          setTestResult(`❌ Test failed: ${message}`)
+          const message = testError instanceof Error ? testError.message : t('messages.test_failed')
+          setError(`${t('messages.test_failed')}: ${message}`)
+          setTestResult(`❌ ${t('messages.test_failed')}: ${message}`)
           setLoading(false)
           setTesting(false)
           return
@@ -130,15 +133,15 @@ export default function SettingsDialog({ open, onOpenChange, onAccountUpdated }:
       setShowAddForm(false)
       await loadAccounts()
 
-      toast.success('Account created successfully!')
+      toast.success(t('messages.account_created'))
 
       // Notify parent component that account was created
       onAccountUpdated?.()
     } catch (error) {
       console.error('Failed to create account:', error)
-      const errorMessage = error instanceof Error ? error.message : 'Failed to create account'
+      const errorMessage = error instanceof Error ? error.message : t('messages.failed_create_account')
       setError(errorMessage)
-      toast.error(`Failed to create account: ${errorMessage}`)
+      toast.error(`${t('messages.failed_create_account')}: ${errorMessage}`)
     } finally {
       setLoading(false)
       setTesting(false)
@@ -155,7 +158,7 @@ export default function SettingsDialog({ open, onOpenChange, onAccountUpdated }:
       setTestResult(null)
       
       if (!editAccount.name || !editAccount.name.trim()) {
-        setError('Account name is required')
+        setError(t('messages.account_required'))
         setLoading(false)
         setTesting(false)
         return
@@ -163,7 +166,7 @@ export default function SettingsDialog({ open, onOpenChange, onAccountUpdated }:
       
       // Test LLM connection first if AI model data is provided
       if (editAccount.model || editAccount.base_url || editAccount.api_key) {
-        setTestResult('Testing LLM connection...')
+        setTestResult(t('messages.testing_llm'))
         
         try {
           const testResponse = await testLLMConnection({
@@ -173,18 +176,18 @@ export default function SettingsDialog({ open, onOpenChange, onAccountUpdated }:
           })
           
           if (!testResponse.success) {
-            setError(`LLM Test Failed: ${testResponse.message}`)
-            setTestResult(`❌ Test failed: ${testResponse.message}`)
+            setError(`${t('messages.test_failed')}: ${testResponse.message}`)
+            setTestResult(`❌ ${t('messages.test_failed')}: ${testResponse.message}`)
             setLoading(false)
             setTesting(false)
             return
           }
           
-          setTestResult('✅ LLM connection test passed!')
+          setTestResult(`✅ ${t('messages.test_passed')}`)
         } catch (testError) {
-          const errorMessage = testError instanceof Error ? testError.message : 'LLM connection test failed'
-          setError(`LLM Test Failed: ${errorMessage}`)
-          setTestResult(`❌ Test failed: ${errorMessage}`)
+          const errorMessage = testError instanceof Error ? testError.message : t('messages.test_failed')
+          setError(`${t('messages.test_failed')}: ${errorMessage}`)
+          setTestResult(`❌ ${t('messages.test_failed')}: ${errorMessage}`)
           setLoading(false)
           setTesting(false)
           return
@@ -192,7 +195,7 @@ export default function SettingsDialog({ open, onOpenChange, onAccountUpdated }:
       }
       
       setTesting(false)
-      setTestResult('✅ Test passed! Saving account...')
+      setTestResult(`✅ ${t('messages.test_passed')} ${t('messages.saving_account')}...`)
       
       console.log('Updating account with data:', editAccount)
       await updateAccount(editingId, editAccount)
@@ -201,16 +204,16 @@ export default function SettingsDialog({ open, onOpenChange, onAccountUpdated }:
       setTestResult(null)
       await loadAccounts()
       
-      toast.success('Account updated successfully!')
+      toast.success(t('messages.account_updated'))
       
       // Notify parent component that account was updated
       onAccountUpdated?.()
     } catch (error) {
       console.error('Failed to update account:', error)
-      const errorMessage = error instanceof Error ? error.message : 'Failed to update account'
+      const errorMessage = error instanceof Error ? error.message : t('messages.failed_update_account')
       setError(errorMessage)
       setTestResult(null)
-      toast.error(`Failed to update account: ${errorMessage}`)
+      toast.error(`${t('messages.failed_update_account')}: ${errorMessage}`)
     } finally {
       setLoading(false)
       setTesting(false)
@@ -238,9 +241,9 @@ export default function SettingsDialog({ open, onOpenChange, onAccountUpdated }:
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-[600px]">
         <DialogHeader>
-          <DialogTitle>Account Management</DialogTitle>
+          <DialogTitle>{t('settings.title')}</DialogTitle>
           <DialogDescription>
-            Manage your trading accounts and AI configurations
+            {t('settings.description')}
           </DialogDescription>
         </DialogHeader>
 
@@ -254,19 +257,19 @@ export default function SettingsDialog({ open, onOpenChange, onAccountUpdated }:
           {/* Existing Accounts */}
           <div className="space-y-4">
             <div className="flex items-center justify-between">
-              <h3 className="text-lg font-medium">Trading Accounts</h3>
+              <h3 className="text-lg font-medium">{t('settings.accounts')}</h3>
               <Button
                 onClick={() => setShowAddForm(!showAddForm)}
                 size="sm"
                 className="flex items-center gap-2"
               >
                 <Plus className="h-4 w-4" />
-                Add Account
+                {t('settings.add_account')}
               </Button>
             </div>
 
             {loading && accounts.length === 0 ? (
-              <div>Loading accounts...</div>
+              <div>{t('messages.loading_accounts')}</div>
             ) : (
               <div className="space-y-3">
                 {accounts.map((account) => (
@@ -275,23 +278,23 @@ export default function SettingsDialog({ open, onOpenChange, onAccountUpdated }:
                       <div className="space-y-3">
                         <div className="grid grid-cols-2 gap-3">
                           <Input
-                            placeholder="Account name"
+                            placeholder={t('settings.account_name')}
                             value={editAccount.name || ''}
                             onChange={(e) => setEditAccount({ ...editAccount, name: e.target.value })}
                           />
                           <Input
-                            placeholder="Model"
+                            placeholder={t('settings.model')}
                             value={editAccount.model || ''}
                             onChange={(e) => setEditAccount({ ...editAccount, model: e.target.value })}
                           />
                         </div>
                         <Input
-                          placeholder="Base URL"
+                          placeholder={t('settings.base_url')}
                           value={editAccount.base_url || ''}
                           onChange={(e) => setEditAccount({ ...editAccount, base_url: e.target.value })}
                         />
                         <Input
-                          placeholder="API Key"
+                          placeholder={t('settings.api_key')}
                           type="password"
                           value={editAccount.api_key || ''}
                           onChange={(e) => setEditAccount({ ...editAccount, api_key: e.target.value })}
@@ -307,10 +310,10 @@ export default function SettingsDialog({ open, onOpenChange, onAccountUpdated }:
                         )}
                         <div className="flex gap-2">
                           <Button onClick={handleUpdateAccount} disabled={loading || testing} size="sm">
-                            {testing ? 'Testing...' : 'Test and Save'}
+                            {testing ? t('common.loading') : t('settings.test_and_save')}
                           </Button>
                           <Button onClick={cancelEdit} variant="outline" size="sm" disabled={loading || testing}>
-                            Cancel
+                            {t('settings.cancel')}
                           </Button>
                         </div>
                       </div>
@@ -319,20 +322,20 @@ export default function SettingsDialog({ open, onOpenChange, onAccountUpdated }:
                         <div className="space-y-1 flex-1">
                           <div className="font-medium">{account.name}</div>
                           <div className="text-xs text-muted-foreground">
-                            {account.model ? `Model: ${account.model}` : 'No model configured'}
+                            {account.model ? `${t('settings.model')}: ${account.model}` : t('settings.no_model_configured')}
                           </div>
                           {account.base_url && (
                             <div className="text-xs text-muted-foreground truncate">
-                              Base URL: {account.base_url}
+                              {t('settings.base_url')}: {account.base_url}
                             </div>
                           )}
                           {account.api_key && (
                             <div className="text-xs text-muted-foreground">
-                              API Key: {'*'.repeat(Math.max(0, (account.api_key?.length || 0) - 4))}{account.api_key?.slice(-4) || '****'}
+                              {t('settings.api_key')}: {'*'.repeat(Math.max(0, (account.api_key?.length || 0) - 4))}{account.api_key?.slice(-4) || '****'}
                             </div>
                           )}
                           <div className="text-xs text-muted-foreground">
-                            Cash: ${account.current_cash?.toLocaleString() || '0'}
+                            {t('settings.cash')}: ${account.current_cash?.toLocaleString() || '0'}
                           </div>
                         </div>
                         <div className="flex gap-2">
@@ -355,40 +358,40 @@ export default function SettingsDialog({ open, onOpenChange, onAccountUpdated }:
           {/* Add New Account Form */}
           {showAddForm && (
             <div className="space-y-4 border-t pt-4">
-              <h3 className="text-lg font-medium">Add New Account</h3>
+              <h3 className="text-lg font-medium">{t('settings.add_new_account')}</h3>
               <div className="space-y-3">
                 <div className="grid grid-cols-2 gap-3">
                   <Input
-                    placeholder="Account name"
+                    placeholder={t('settings.account_name')}
                     value={newAccount.name || ''}
                     onChange={(e) => setNewAccount({ ...newAccount, name: e.target.value })}
                   />
                   <Input
-                    placeholder="Model (e.g., gpt-4)"
+                    placeholder={t('settings.model')}
                     value={newAccount.model || ''}
                     onChange={(e) => setNewAccount({ ...newAccount, model: e.target.value })}
                   />
                 </div>
                 <Input
-                  placeholder="Base URL (e.g., https://api.openai.com/v1)"
+                  placeholder={t('settings.base_url')}
                   value={newAccount.base_url || ''}
                   onChange={(e) => setNewAccount({ ...newAccount, base_url: e.target.value })}
                 />
                 <Input
-                  placeholder="API Key"
+                  placeholder={t('settings.api_key')}
                   type="password"
                   value={newAccount.api_key || ''}
                   onChange={(e) => setNewAccount({ ...newAccount, api_key: e.target.value })}
                 />
                 <div className="flex gap-2">
                   <Button onClick={handleCreateAccount} disabled={loading}>
-                    Test and Create
+                    {t('settings.test_and_create')}
                   </Button>
                   <Button 
                     onClick={() => setShowAddForm(false)} 
                     variant="outline"
                   >
-                    Cancel
+                    {t('settings.cancel')}
                   </Button>
                 </div>
               </div>

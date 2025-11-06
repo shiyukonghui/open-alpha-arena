@@ -87,7 +87,7 @@ interface AccountDataViewProps {
   aiDecisions: AIDecision[]
   allAssetCurves: any[]
   wsRef?: React.MutableRefObject<WebSocket | null>
-  onSwitchAccount: (accountId: number) => void
+  onSwitchAccount?: (accountId: number) => void
   onRefreshData: () => void
   accountRefreshTrigger?: number
   showAssetCurves?: boolean

@@ -1,6 +1,7 @@
-import { useState, useEffect } from 'react'
-import { PieChart, Settings, TrendingUp, BarChart3 } from 'lucide-react'
+import { useState } from 'react'
+import { PieChart, Settings, TrendingUp, BarChart3, Languages } from 'lucide-react'
 import SettingsDialog from './SettingsDialog'
+import { useLanguageStore } from '@/lib/i18n'
 
 interface SidebarProps {
   currentPage?: string
@@ -10,6 +11,11 @@ interface SidebarProps {
 
 export default function Sidebar({ currentPage = 'comprehensive', onPageChange, onAccountUpdated }: SidebarProps) {
   const [settingsOpen, setSettingsOpen] = useState(false)
+  const { language, setLanguage, t } = useLanguageStore()
+  
+  const toggleLanguage = () => {
+    setLanguage(language === 'en' ? 'zh' : 'en')
+  }
 
   return (
     <>
@@ -23,7 +29,7 @@ export default function Sidebar({ currentPage = 'comprehensive', onPageChange, o
                 : 'hover:bg-muted text-muted-foreground'
             }`}
             onClick={() => onPageChange?.('comprehensive')}
-            title="Open Alpha Arena"
+            title={t('sidebar.open_alpha_arena')}
           >
             <BarChart3 className="w-5 h-5" />
           </button>
@@ -35,15 +41,23 @@ export default function Sidebar({ currentPage = 'comprehensive', onPageChange, o
                 : 'hover:bg-muted text-muted-foreground'
             }`}
             onClick={() => onPageChange?.('portfolio')}
-            title="Portfolio"
+            title={t('sidebar.portfolio')}
           >
             <PieChart className="w-5 h-5" />
           </button>
 
           <button
             className="flex items-center justify-center w-10 h-10 rounded-lg hover:bg-muted transition-colors text-muted-foreground"
+            onClick={toggleLanguage}
+            title="切换语言"
+          >
+            <Languages className="w-5 h-5" />
+          </button>
+
+          <button
+            className="flex items-center justify-center w-10 h-10 rounded-lg hover:bg-muted transition-colors text-muted-foreground"
             onClick={() => setSettingsOpen(true)}
-            title="Settings"
+            title={t('sidebar.settings')}
           >
             <Settings className="w-5 h-5" />
           </button>
@@ -58,10 +72,10 @@ export default function Sidebar({ currentPage = 'comprehensive', onPageChange, o
                 : 'hover:bg-muted text-muted-foreground'
             }`}
             onClick={() => onPageChange?.('comprehensive')}
-            title="Open Alpha Arena"
+            title={t('sidebar.open_alpha_arena')}
           >
             <BarChart3 className="w-5 h-5" />
-            <span className="text-xs mt-1">Open Alpha Arena</span>
+            <span className="text-xs mt-1">{t('sidebar.open_alpha_arena')}</span>
           </button>
           <button
             className={`flex flex-col items-center justify-center w-12 h-12 rounded-lg transition-colors ${
@@ -70,10 +84,10 @@ export default function Sidebar({ currentPage = 'comprehensive', onPageChange, o
                 : 'hover:bg-muted text-muted-foreground'
             }`}
             onClick={() => onPageChange?.('portfolio')}
-            title="Portfolio"
+            title={t('sidebar.portfolio')}
           >
             <PieChart className="w-5 h-5" />
-            <span className="text-xs mt-1">Portfolio</span>
+            <span className="text-xs mt-1">{t('sidebar.portfolio')}</span>
           </button>
           <button
             className={`flex flex-col items-center justify-center w-12 h-12 rounded-lg transition-colors ${
@@ -82,18 +96,18 @@ export default function Sidebar({ currentPage = 'comprehensive', onPageChange, o
                 : 'hover:bg-muted text-muted-foreground'
             }`}
             onClick={() => onPageChange?.('asset-curve')}
-            title="Asset Curve"
+            title={t('sidebar.asset_curve')}
           >
             <TrendingUp className="w-5 h-5" />
-            <span className="text-xs mt-1">Curve</span>
+            <span className="text-xs mt-1">{t('sidebar.asset_curve')}</span>
           </button>
           <button
             className="flex flex-col items-center justify-center w-12 h-12 rounded-lg hover:bg-muted transition-colors text-muted-foreground"
             onClick={() => setSettingsOpen(true)}
-            title="Settings"
+            title={t('sidebar.settings')}
           >
             <Settings className="w-5 h-5" />
-            <span className="text-xs mt-1">Settings</span>
+            <span className="text-xs mt-1">{t('sidebar.settings')}</span>
           </button>
         </nav>
       </aside>
