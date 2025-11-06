@@ -1,5 +1,6 @@
-import { useState, useEffect } from 'react'
-import { PieChart, Settings, TrendingUp, BarChart3 } from 'lucide-react'
+import { useLanguage } from '@/contexts/LanguageContext'
+import { BarChart3, PieChart, Settings, TrendingUp } from 'lucide-react'
+import { useState } from 'react'
 import SettingsDialog from './SettingsDialog'
 
 interface SidebarProps {
@@ -10,6 +11,7 @@ interface SidebarProps {
 
 export default function Sidebar({ currentPage = 'comprehensive', onPageChange, onAccountUpdated }: SidebarProps) {
   const [settingsOpen, setSettingsOpen] = useState(false)
+  const { t } = useLanguage()
 
   return (
     <>
@@ -23,7 +25,7 @@ export default function Sidebar({ currentPage = 'comprehensive', onPageChange, o
                 : 'hover:bg-muted text-muted-foreground'
             }`}
             onClick={() => onPageChange?.('comprehensive')}
-            title="Open Alpha Arena"
+            title={t('comprehensive')}
           >
             <BarChart3 className="w-5 h-5" />
           </button>
@@ -35,7 +37,7 @@ export default function Sidebar({ currentPage = 'comprehensive', onPageChange, o
                 : 'hover:bg-muted text-muted-foreground'
             }`}
             onClick={() => onPageChange?.('portfolio')}
-            title="Portfolio"
+            title={t('portfolio')}
           >
             <PieChart className="w-5 h-5" />
           </button>
@@ -43,7 +45,7 @@ export default function Sidebar({ currentPage = 'comprehensive', onPageChange, o
           <button
             className="flex items-center justify-center w-10 h-10 rounded-lg hover:bg-muted transition-colors text-muted-foreground"
             onClick={() => setSettingsOpen(true)}
-            title="Settings"
+            title={t('settings')}
           >
             <Settings className="w-5 h-5" />
           </button>
@@ -58,10 +60,10 @@ export default function Sidebar({ currentPage = 'comprehensive', onPageChange, o
                 : 'hover:bg-muted text-muted-foreground'
             }`}
             onClick={() => onPageChange?.('comprehensive')}
-            title="Open Alpha Arena"
+            title={t('comprehensive')}
           >
             <BarChart3 className="w-5 h-5" />
-            <span className="text-xs mt-1">Open Alpha Arena</span>
+            <span className="text-xs mt-1">{t('comprehensive')}</span>
           </button>
           <button
             className={`flex flex-col items-center justify-center w-12 h-12 rounded-lg transition-colors ${
@@ -70,10 +72,10 @@ export default function Sidebar({ currentPage = 'comprehensive', onPageChange, o
                 : 'hover:bg-muted text-muted-foreground'
             }`}
             onClick={() => onPageChange?.('portfolio')}
-            title="Portfolio"
+            title={t('portfolio')}
           >
             <PieChart className="w-5 h-5" />
-            <span className="text-xs mt-1">Portfolio</span>
+            <span className="text-xs mt-1">{t('portfolio')}</span>
           </button>
           <button
             className={`flex flex-col items-center justify-center w-12 h-12 rounded-lg transition-colors ${
@@ -85,15 +87,15 @@ export default function Sidebar({ currentPage = 'comprehensive', onPageChange, o
             title="Asset Curve"
           >
             <TrendingUp className="w-5 h-5" />
-            <span className="text-xs mt-1">Curve</span>
+            <span className="text-xs mt-1">曲线</span>
           </button>
           <button
             className="flex flex-col items-center justify-center w-12 h-12 rounded-lg hover:bg-muted transition-colors text-muted-foreground"
             onClick={() => setSettingsOpen(true)}
-            title="Settings"
+            title={t('settings')}
           >
             <Settings className="w-5 h-5" />
-            <span className="text-xs mt-1">Settings</span>
+            <span className="text-xs mt-1">{t('settings')}</span>
           </button>
         </nav>
       </aside>

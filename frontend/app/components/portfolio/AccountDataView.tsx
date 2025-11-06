@@ -1,15 +1,16 @@
-import React from 'react'
-import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs'
-import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components/ui/table'
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip'
-import { Button } from '@/components/ui/button'
-import { toast } from 'react-hot-toast'
-import AssetCurveWithData from './AssetCurveWithData'
 import AccountSelector from '@/components/layout/AccountSelector'
 import TradingPanel from '@/components/trading/TradingPanel'
-import { Doughnut } from 'react-chartjs-2'
-import { Chart as ChartJS, ArcElement, Tooltip as ChartTooltip, Legend } from 'chart.js'
+import { Button } from '@/components/ui/button'
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip'
+import { useLanguage } from '@/contexts/LanguageContext'
 import { AIDecision } from '@/lib/api'
+import { ArcElement, Chart as ChartJS, Tooltip as ChartTooltip, Legend } from 'chart.js'
+import React from 'react'
+import { Doughnut } from 'react-chartjs-2'
+import { toast } from 'react-hot-toast'
+import AssetCurveWithData from './AssetCurveWithData'
 
 // Register Chart.js components for pie chart
 ChartJS.register(ArcElement, ChartTooltip, Legend)
@@ -133,10 +134,12 @@ export default function AccountDataView({
     }
   }
 
+  const { t } = useLanguage()
+
   if (!overview) {
     return (
       <div className="flex items-center justify-center h-96">
-        <div className="text-muted-foreground">Loading account data...</div>
+        <div className="text-muted-foreground">{t('loading')}</div>
       </div>
     )
   }
@@ -170,33 +173,33 @@ export default function AccountDataView({
             {/* Tabs */}
             <div className={`${showTradingPanel ? 'col-span-3' : 'col-span-1'} overflow-hidden`}>
               <Tabs defaultValue="ai-decisions" className="h-full flex flex-col">
-                <TabsList className="grid w-full grid-cols-4">
-                  <TabsTrigger value="ai-decisions">AI Decisions</TabsTrigger>
-                  <TabsTrigger value="positions">Positions</TabsTrigger>
-                  <TabsTrigger value="orders">Orders</TabsTrigger>
-                  <TabsTrigger value="trades">Trades</TabsTrigger>
-                </TabsList>
+              <TabsList className="grid w-full grid-cols-4">
+                <TabsTrigger value="ai-decisions">{t('aiDecisions')}</TabsTrigger>
+                <TabsTrigger value="positions">{t('positions')}</TabsTrigger>
+                <TabsTrigger value="orders">{t('orders')}</TabsTrigger>
+                <TabsTrigger value="trades">{t('trades')}</TabsTrigger>
+              </TabsList>
 
-                <div className="flex-1 overflow-hidden">
-                  <TabsContent value="ai-decisions" className="h-full overflow-y-auto">
-                    <AIDecisionLog aiDecisions={aiDecisions} />
-                  </TabsContent>
+              <div className="flex-1 overflow-hidden">
+                <TabsContent value="ai-decisions" className="h-full overflow-y-auto">
+                  <AIDecisionLog aiDecisions={aiDecisions} t={t} />
+                </TabsContent>
 
-                  <TabsContent value="positions" className="h-full overflow-y-auto">
-                    <div className="space-y-6">
-                      <PortfolioPieChart overview={overview} positions={positions} />
-                      <PositionList positions={positions} />
-                    </div>
-                  </TabsContent>
+                <TabsContent value="positions" className="h-full overflow-y-auto">
+                  <div className="space-y-6">
+                    <PortfolioPieChart overview={overview} positions={positions} t={t} />
+                    <PositionList positions={positions} t={t} />
+                  </div>
+                </TabsContent>
 
-                  <TabsContent value="orders" className="h-full overflow-y-auto">
-                    <OrderBook orders={orders} onCancelOrder={cancelOrder} />
-                  </TabsContent>
+                <TabsContent value="orders" className="h-full overflow-y-auto">
+                  <OrderBook orders={orders} onCancelOrder={cancelOrder} t={t} />
+                </TabsContent>
 
-                  <TabsContent value="trades" className="h-full overflow-y-auto">
-                    <TradeHistory trades={trades} />
-                  </TabsContent>
-                </div>
+                <TabsContent value="trades" className="h-full overflow-y-auto">
+                  <TradeHistory trades={trades} t={t} />
+                </TabsContent>
+              </div>
               </Tabs>
             </div>
 
@@ -238,22 +241,22 @@ export default function AccountDataView({
 }
 
 // Order Book Component
-function OrderBook({ orders, onCancelOrder }: { orders: Order[], onCancelOrder: (id: number) => void }) {
+function OrderBook({ orders, onCancelOrder, t }: { orders: Order[], onCancelOrder: (id: number) => void, t: any }) {
   return (
     <div>
       <Table>
         <TableHeader>
           <TableRow>
-            <TableHead>Time</TableHead>
+            <TableHead>{t('time')}</TableHead>
             <TableHead>Order No</TableHead>
-            <TableHead>Symbol</TableHead>
-            <TableHead>Side</TableHead>
-            <TableHead>Type</TableHead>
-            <TableHead>Price</TableHead>
-            <TableHead>Qty</TableHead>
-            <TableHead>Leverage</TableHead>
-            <TableHead>Status</TableHead>
-            <TableHead>Actions</TableHead>
+            <TableHead>{t('symbol')}</TableHead>
+            <TableHead>{t('side')}</TableHead>
+            <TableHead>{t('type')}</TableHead>
+            <TableHead>{t('price')}</TableHead>
+            <TableHead>{t('quantity')}</TableHead>
+            <TableHead>{t('leverage')}</TableHead>
+            <TableHead>{t('status')}</TableHead>
+            <TableHead>{t('actions')}</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -275,7 +278,7 @@ function OrderBook({ orders, onCancelOrder }: { orders: Order[], onCancelOrder: 
                     size="sm"
                     onClick={() => onCancelOrder(o.id)}
                   >
-                    Cancel
+                    {t('cancel')}
                   </Button>
                 ) : null}
               </TableCell>
@@ -288,19 +291,19 @@ function OrderBook({ orders, onCancelOrder }: { orders: Order[], onCancelOrder: 
 }
 
 // Position List Component
-function PositionList({ positions }: { positions: Position[] }) {
+function PositionList({ positions, t }: { positions: Position[], t: any }) {
   return (
     <div>
       <Table>
         <TableHeader>
           <TableRow>
-            <TableHead>Symbol</TableHead>
-            <TableHead>Qty</TableHead>
-            <TableHead>Leverage</TableHead>
-            <TableHead>Avg Cost</TableHead>
-            <TableHead>Last Price</TableHead>
-            <TableHead>Notional Value</TableHead>
-            <TableHead>P&L</TableHead>
+            <TableHead>{t('symbol')}</TableHead>
+            <TableHead>{t('quantity')}</TableHead>
+            <TableHead>{t('leverage')}</TableHead>
+            <TableHead>{t('avgCost')}</TableHead>
+            <TableHead>{t('lastPrice')}</TableHead>
+            <TableHead>{t('notionalValue')}</TableHead>
+            <TableHead>{t('pnl')}</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -329,19 +332,19 @@ function PositionList({ positions }: { positions: Position[] }) {
 }
 
 // Trade History Component
-function TradeHistory({ trades }: { trades: Trade[] }) {
+function TradeHistory({ trades, t }: { trades: Trade[], t: any }) {
   return (
     <div>
       <Table>
         <TableHeader>
           <TableRow>
-            <TableHead>Time</TableHead>
-            <TableHead>Symbol</TableHead>
-            <TableHead>Side</TableHead>
-            <TableHead>Price</TableHead>
-            <TableHead>Qty</TableHead>
-            <TableHead>Commission</TableHead>
-            <TableHead>Total</TableHead>
+            <TableHead>{t('time')}</TableHead>
+            <TableHead>{t('symbol')}</TableHead>
+            <TableHead>{t('side')}</TableHead>
+            <TableHead>{t('price')}</TableHead>
+            <TableHead>{t('quantity')}</TableHead>
+            <TableHead>{t('commission')}</TableHead>
+            <TableHead>{t('total')}</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -365,21 +368,21 @@ function TradeHistory({ trades }: { trades: Trade[] }) {
 }
 
 // AI Decision Log Component
-function AIDecisionLog({ aiDecisions }: { aiDecisions: AIDecision[] }) {
+function AIDecisionLog({ aiDecisions, t }: { aiDecisions: AIDecision[], t: any }) {
   return (
     <div>
       <Table>
         <TableHeader>
           <TableRow>
-            <TableHead>Time</TableHead>
-            <TableHead>Operation</TableHead>
-            <TableHead>Symbol</TableHead>
-            <TableHead>Prev %</TableHead>
-            <TableHead>Target %</TableHead>
-            <TableHead>Balance</TableHead>
-            <TableHead>Leverage</TableHead>
-            <TableHead>Executed</TableHead>
-            <TableHead>Reason</TableHead>
+            <TableHead>{t('time')}</TableHead>
+            <TableHead>{t('operation')}</TableHead>
+            <TableHead>{t('symbol')}</TableHead>
+            <TableHead>{t('prevPercent')}</TableHead>
+            <TableHead>{t('targetPercent')}</TableHead>
+            <TableHead>{t('balance')}</TableHead>
+            <TableHead>{t('leverage')}</TableHead>
+            <TableHead>{t('executed')}</TableHead>
+            <TableHead>{t('reason')}</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -430,7 +433,7 @@ function AIDecisionLog({ aiDecisions }: { aiDecisions: AIDecision[] }) {
 }
 
 // Portfolio Pie Chart Component
-function PortfolioPieChart({ overview, positions }: { overview: Overview, positions: Position[] }) {
+function PortfolioPieChart({ overview, positions, t }: { overview: Overview, positions: Position[], t: any }) {
   // Calculate portfolio composition based on notional value (risk exposure)
   const cashValue = overview.account.current_cash
   
@@ -506,7 +509,7 @@ function PortfolioPieChart({ overview, positions }: { overview: Overview, positi
               ${totalExposure.toLocaleString(undefined, { maximumFractionDigits: 0 })}
             </div>
             <div className="text-xs text-gray-500 mt-1">
-              Total Exposure
+              {t('totalExposure')}
             </div>
           </div>
         </div>

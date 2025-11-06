@@ -1,7 +1,7 @@
-import React, { useEffect, useRef, useState } from 'react'
-import ReactDOM from 'react-dom/client'
-import './index.css'
-import { Toaster, toast } from 'react-hot-toast'
+import React, { useEffect, useRef, useState } from 'react';
+import ReactDOM from 'react-dom/client';
+import { Toaster, toast } from 'react-hot-toast';
+import './index.css';
 
 // Create a module-level WebSocket singleton to avoid duplicate connections in React StrictMode
 let __WS_SINGLETON__: WebSocket | null = null;
@@ -13,11 +13,12 @@ const resolveWsUrl = () => {
 }
 
 
-import Header from '@/components/layout/Header'
-import Sidebar from '@/components/layout/Sidebar'
-import Portfolio from '@/components/portfolio/Portfolio'
-import ComprehensiveView from '@/components/portfolio/ComprehensiveView'
-import { AIDecision, getAccounts } from '@/lib/api'
+import Header from '@/components/layout/Header';
+import Sidebar from '@/components/layout/Sidebar';
+import ComprehensiveView from '@/components/portfolio/ComprehensiveView';
+import Portfolio from '@/components/portfolio/Portfolio';
+import { LanguageProvider } from '@/contexts/LanguageContext';
+import { AIDecision, getAccounts } from '@/lib/api';
 
 interface User {
   id: number
@@ -338,7 +339,9 @@ function App() {
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
-    <Toaster position="top-right" />
-    <App />
+    <LanguageProvider>
+      <Toaster position="top-right" />
+      <App />
+    </LanguageProvider>
   </React.StrictMode>,
 )

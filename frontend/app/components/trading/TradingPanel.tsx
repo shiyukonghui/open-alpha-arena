@@ -1,7 +1,8 @@
+import { useLanguage } from '@/contexts/LanguageContext'
 import { useEffect, useState } from 'react'
 import { toast } from 'react-hot-toast'
-import OrderForm from './OrderForm'
 import AuthDialog from './AuthDialog'
+import OrderForm from './OrderForm'
 import TradeButtons from './TradeButtons'
 
 interface User {
@@ -124,16 +125,18 @@ export default function TradingPanel({ onPlace, user, positions = [], lastPrices
       setPendingTrade(null)
   }
 
+  const { t } = useLanguage()
+
   const handlePlaceOrder = () => {
     // Validate price
     if (orderType === 'LIMIT' && price <= 0) {
-      toast.error('Please input a valid limit price')
+      toast.error(t('invalidPrice'))
       return
     }
     
     // Validate quantity
     if (quantity <= 0 || !Number.isFinite(quantity)) {
-      toast.error('Please input a valid quantity')
+      toast.error(t('invalidQuantity'))
       return
     }
     
@@ -145,14 +148,14 @@ export default function TradingPanel({ onPlace, user, positions = [], lastPrices
       const cashAvailable = user?.current_cash ?? 0
       
       if (marginNeeded > cashAvailable) {
-        toast.error(`Insufficient cash. Need $${marginNeeded.toFixed(2)} (${leverage}x leverage)`)
+        toast.error(`${t('insufficientCash')} $${marginNeeded.toFixed(2)} (${leverage}x ${t('leverage')})`)
         return
       }
     } else {
       // Closing position - check available position
       const positionAvailable = positions.find(p => p.symbol === symbol && p.market === market)?.available_quantity || 0
       if (quantity > positionAvailable) {
-        toast.error('Insufficient position to close')
+        toast.error(t('insufficientPosition'))
         return
       }
     }
