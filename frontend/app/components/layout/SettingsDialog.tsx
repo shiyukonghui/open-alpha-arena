@@ -1,5 +1,4 @@
-import { useState, useEffect } from 'react'
-import toast from 'react-hot-toast'
+import { Button } from '@/components/ui/button'
 import {
   Dialog,
   DialogContent,
@@ -7,18 +6,19 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog'
-import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import { Plus, Pencil } from 'lucide-react'
-import { 
-  getAccounts as getAccounts,
-  createAccount as createAccount,
-  updateAccount as updateAccount,
+import { useLanguage } from '@/contexts/LanguageContext'
+import {
+  createAccount,
+  getAccounts,
   testLLMConnection,
+  updateAccount,
   type TradingAccount,
-  type TradingAccountCreate,
-  type TradingAccountUpdate
+  type TradingAccountCreate
 } from '@/lib/api'
+import { Pencil, Plus } from 'lucide-react'
+import { useEffect, useState } from 'react'
+import toast from 'react-hot-toast'
 
 interface SettingsDialogProps {
   open: boolean
@@ -234,13 +234,15 @@ export default function SettingsDialog({ open, onOpenChange, onAccountUpdated }:
     setError(null)
   }
 
+  const { t } = useLanguage()
+
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-[600px]">
         <DialogHeader>
-          <DialogTitle>Account Management</DialogTitle>
+          <DialogTitle>{t('accountManagement')}</DialogTitle>
           <DialogDescription>
-            Manage your trading accounts and AI configurations
+            {t('accountManagementDescription')}
           </DialogDescription>
         </DialogHeader>
 
@@ -254,19 +256,19 @@ export default function SettingsDialog({ open, onOpenChange, onAccountUpdated }:
           {/* Existing Accounts */}
           <div className="space-y-4">
             <div className="flex items-center justify-between">
-              <h3 className="text-lg font-medium">Trading Accounts</h3>
-              <Button
-                onClick={() => setShowAddForm(!showAddForm)}
-                size="sm"
-                className="flex items-center gap-2"
-              >
-                <Plus className="h-4 w-4" />
-                Add Account
-              </Button>
+            <h3 className="text-lg font-medium">{t('tradingAccounts')}</h3>
+            <Button
+              onClick={() => setShowAddForm(!showAddForm)}
+              size="sm"
+              className="flex items-center gap-2"
+            >
+              <Plus className="h-4 w-4" />
+              {t('addAccount')}
+            </Button>
             </div>
 
             {loading && accounts.length === 0 ? (
-              <div>Loading accounts...</div>
+              <div>{t('loadingAccounts')}</div>
             ) : (
               <div className="space-y-3">
                 {accounts.map((account) => (
@@ -275,23 +277,23 @@ export default function SettingsDialog({ open, onOpenChange, onAccountUpdated }:
                       <div className="space-y-3">
                         <div className="grid grid-cols-2 gap-3">
                           <Input
-                            placeholder="Account name"
+                            placeholder={t('accountName')}
                             value={editAccount.name || ''}
                             onChange={(e) => setEditAccount({ ...editAccount, name: e.target.value })}
                           />
                           <Input
-                            placeholder="Model"
+                            placeholder={t('model')}
                             value={editAccount.model || ''}
                             onChange={(e) => setEditAccount({ ...editAccount, model: e.target.value })}
                           />
                         </div>
                         <Input
-                          placeholder="Base URL"
+                          placeholder={t('baseUrl')}
                           value={editAccount.base_url || ''}
                           onChange={(e) => setEditAccount({ ...editAccount, base_url: e.target.value })}
                         />
                         <Input
-                          placeholder="API Key"
+                          placeholder={t('apiKey')}
                           type="password"
                           value={editAccount.api_key || ''}
                           onChange={(e) => setEditAccount({ ...editAccount, api_key: e.target.value })}
@@ -307,33 +309,33 @@ export default function SettingsDialog({ open, onOpenChange, onAccountUpdated }:
                         )}
                         <div className="flex gap-2">
                           <Button onClick={handleUpdateAccount} disabled={loading || testing} size="sm">
-                            {testing ? 'Testing...' : 'Test and Save'}
+                            {testing ? t('testLLM') : t('testAndSave')}
                           </Button>
                           <Button onClick={cancelEdit} variant="outline" size="sm" disabled={loading || testing}>
-                            Cancel
+                            {t('cancel')}
                           </Button>
                         </div>
                       </div>
                     ) : (
                       <div className="flex items-center justify-between">
                         <div className="space-y-1 flex-1">
-                          <div className="font-medium">{account.name}</div>
-                          <div className="text-xs text-muted-foreground">
-                            {account.model ? `Model: ${account.model}` : 'No model configured'}
+                        <div className="font-medium">{account.name}</div>
+                        <div className="text-xs text-muted-foreground">
+                          {account.model ? `${t('model')}: ${account.model}` : t('noModelConfigured')}
+                        </div>
+                        {account.base_url && (
+                          <div className="text-xs text-muted-foreground truncate">
+                            {t('baseUrl')}: {account.base_url}
                           </div>
-                          {account.base_url && (
-                            <div className="text-xs text-muted-foreground truncate">
-                              Base URL: {account.base_url}
-                            </div>
-                          )}
-                          {account.api_key && (
-                            <div className="text-xs text-muted-foreground">
-                              API Key: {'*'.repeat(Math.max(0, (account.api_key?.length || 0) - 4))}{account.api_key?.slice(-4) || '****'}
-                            </div>
-                          )}
+                        )}
+                        {account.api_key && (
                           <div className="text-xs text-muted-foreground">
-                            Cash: ${account.current_cash?.toLocaleString() || '0'}
+                            {t('apiKey')}: {'*'.repeat(Math.max(0, (account.api_key?.length || 0) - 4))}{account.api_key?.slice(-4) || '****'}
                           </div>
+                        )}
+                        <div className="text-xs text-muted-foreground">
+                          {t('cash')}: ${account.current_cash?.toLocaleString() || '0'}
+                        </div>
                         </div>
                         <div className="flex gap-2">
                           <Button
@@ -342,6 +344,7 @@ export default function SettingsDialog({ open, onOpenChange, onAccountUpdated }:
                             size="sm"
                           >
                             <Pencil className="h-4 w-4" />
+                            {t('edit')}
                           </Button>
                         </div>
                       </div>
@@ -355,40 +358,40 @@ export default function SettingsDialog({ open, onOpenChange, onAccountUpdated }:
           {/* Add New Account Form */}
           {showAddForm && (
             <div className="space-y-4 border-t pt-4">
-              <h3 className="text-lg font-medium">Add New Account</h3>
+              <h3 className="text-lg font-medium">{t('addNewAccount')}</h3>
               <div className="space-y-3">
                 <div className="grid grid-cols-2 gap-3">
                   <Input
-                    placeholder="Account name"
+                    placeholder={t('accountName')}
                     value={newAccount.name || ''}
                     onChange={(e) => setNewAccount({ ...newAccount, name: e.target.value })}
                   />
                   <Input
-                    placeholder="Model (e.g., gpt-4)"
+                    placeholder={`${t('model')} (e.g., gpt-4)`}
                     value={newAccount.model || ''}
                     onChange={(e) => setNewAccount({ ...newAccount, model: e.target.value })}
                   />
                 </div>
                 <Input
-                  placeholder="Base URL (e.g., https://api.openai.com/v1)"
+                  placeholder={`${t('baseUrl')} (e.g., https://api.openai.com/v1)`}
                   value={newAccount.base_url || ''}
                   onChange={(e) => setNewAccount({ ...newAccount, base_url: e.target.value })}
                 />
                 <Input
-                  placeholder="API Key"
+                  placeholder={t('apiKey')}
                   type="password"
                   value={newAccount.api_key || ''}
                   onChange={(e) => setNewAccount({ ...newAccount, api_key: e.target.value })}
                 />
                 <div className="flex gap-2">
                   <Button onClick={handleCreateAccount} disabled={loading}>
-                    Test and Create
+                    {loading ? (testing ? t('testLLM') : t('creatingAccount')) : t('testAndCreate')}
                   </Button>
                   <Button 
                     onClick={() => setShowAddForm(false)} 
                     variant="outline"
                   >
-                    Cancel
+                    {t('cancel')}
                   </Button>
                 </div>
               </div>

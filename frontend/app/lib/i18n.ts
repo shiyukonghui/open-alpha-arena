@@ -81,7 +81,31 @@ export const translations = {
     invalidPrice: '请输入有效的价格',
     invalidQuantity: '请输入有效的数量',
     insufficientCash: '资金不足，需要',
-    insufficientPosition: '持仓不足'
+    insufficientPosition: '持仓不足',
+    
+    // Settings Dialog - Account Management
+    accountManagement: '模型管理',
+    accountManagementDescription: '管理您的模型账户和AI配置',
+    tradingAccounts: '模型账户',
+    addAccount: '添加模型账户',
+    loadingAccounts: '加载账户中...',
+    accountName: '账户名称',
+    model: '模型',
+    baseUrl: '基础URL',
+    apiKey: 'API密钥',
+    cash: '现金',
+    noModelConfigured: '未配置模型',
+    edit: '编辑',
+    testAndSave: '测试并保存',
+    testAndCreate: '测试并创建',
+    testLLM: '测试LLM连接...',
+    testPassed: '✅ 测试通过',
+    testFailed: '❌ 测试失败',
+    creatingAccount: '正在创建账户...',
+    updatingAccount: '正在更新账户...',
+    accountCreated: '账户创建成功',
+    accountUpdated: '账户更新成功',
+    addNewAccount: '添加新账户'
   },
   'en-US': {
     title: 'Crypto Paper Trading',
@@ -163,7 +187,31 @@ export const translations = {
     invalidPrice: 'Please input a valid price',
     invalidQuantity: 'Please input a valid quantity',
     insufficientCash: 'Insufficient cash. Need',
-    insufficientPosition: 'Insufficient position to close'
+    insufficientPosition: 'Insufficient position to close',
+    
+    // Settings Dialog - Account Management
+    accountManagement: 'Account Management',
+    accountManagementDescription: 'Manage your trading accounts and AI configurations',
+    tradingAccounts: 'Trading Accounts',
+    addAccount: 'Add Account',
+    loadingAccounts: 'Loading accounts...',
+    accountName: 'Account Name',
+    model: 'Model',
+    baseUrl: 'Base URL',
+    apiKey: 'API Key',
+    cash: 'Cash',
+    noModelConfigured: 'No model configured',
+    edit: 'Edit',
+    testAndSave: 'Test and Save',
+    testAndCreate: 'Test and Create',
+    testLLM: 'Testing LLM connection...',
+    testPassed: '✅ Test passed',
+    testFailed: '❌ Test failed',
+    creatingAccount: 'Creating account...',
+    updatingAccount: 'Updating account...',
+    accountCreated: 'Account created successfully',
+    accountUpdated: 'Account updated successfully',
+    addNewAccount: 'Add New Account'
   }
 }
 
