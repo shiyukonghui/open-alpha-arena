@@ -66,6 +66,14 @@ export const translations = {
     orderCancelled: '订单已取消',
     insufficientFunds: '资金不足',
     
+    // Trading Info/Stats
+    notionalValue: '名义价值',
+    marginRequired: '所需保证金',
+    availableCash: '可用资金',
+    frozenCash: '冻结资金',
+    availablePosition: '可用仓位',
+    maxQuantity: '最大数量',
+    
     // Common
     loading: '加载中...',
     error: '错误',
@@ -171,6 +179,14 @@ export const translations = {
     orderPlaced: 'Order placed',
     orderCancelled: 'Order cancelled',
     insufficientFunds: 'Insufficient funds',
+    
+    // Trading Info/Stats
+    notionalValue: 'Notional Value',
+    marginRequired: 'Margin Required',
+    availableCash: 'Available Cash',
+    frozenCash: 'Frozen Cash',
+    availablePosition: 'Available Position',
+    maxQuantity: 'Max Quantity',
     
     // Common
     loading: 'Loading...',

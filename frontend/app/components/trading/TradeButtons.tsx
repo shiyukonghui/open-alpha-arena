@@ -1,5 +1,6 @@
-import React from 'react'
 import { Button } from '@/components/ui/button'
+import { useLanguage } from '@/contexts/LanguageContext'
+import React from 'react'
 
 interface PositionLite { 
   symbol: string
@@ -38,6 +39,7 @@ export default function TradeButtons({
   lastPrices = {},
   onPlaceOrder
 }: TradeButtonsProps) {
+  const { t } = useLanguage()
   const currencySymbol = '$'
 
   const notional = price * quantity
@@ -67,40 +69,40 @@ export default function TradeButtons({
     : 'bg-red-600 hover:bg-red-500'
 
   return (
-    <div className="space-y-4">
-      {/* Trading Information */}
-      <div className="space-y-3 pt-4">
-        <div className="flex justify-between">
-          <span className="text-xs">Notional Value</span>
-          <span className="text-xs">{currencySymbol}{notional.toFixed(2)}</span>
-        </div>
-        {leverage > 1 && (
+      <div className="space-y-4">
+        {/* Trading Information */}
+        <div className="space-y-3 pt-4">
           <div className="flex justify-between">
-            <span className="text-xs">Margin Required</span>
-            <span className="text-xs text-blue-500">{currencySymbol}{margin.toFixed(2)} ({leverage}x)</span>
+            <span className="text-xs">{t('notionalValue')}</span>
+            <span className="text-xs">{currencySymbol}{notional.toFixed(2)}</span>
           </div>
-        )}
-        <div className="flex justify-between">
-          <span className="text-xs">Available Cash</span>
-          <span className="text-xs text-green-500">{currencySymbol}{cashAvailable.toFixed(2)}</span>
-        </div>
-        <div className="flex justify-between">
-          <span className="text-xs">Frozen Cash</span>
-          <span className="text-xs text-orange-500">{currencySymbol}{frozenCash.toFixed(2)}</span>
-        </div>
-        {(side === 'SELL' || side === 'BUY') && (
+          {leverage > 1 && (
+            <div className="flex justify-between">
+              <span className="text-xs">{t('marginRequired')}</span>
+              <span className="text-xs text-blue-500">{currencySymbol}{margin.toFixed(2)} ({leverage}x)</span>
+            </div>
+          )}
           <div className="flex justify-between">
-            <span className="text-xs">Available Position</span>
-            <span className="text-xs text-purple-500">{positionAvailable}</span>
+            <span className="text-xs">{t('availableCash')}</span>
+            <span className="text-xs text-green-500">{currencySymbol}{cashAvailable.toFixed(2)}</span>
           </div>
-        )}
-        {(side === 'LONG' || side === 'SHORT') && (
           <div className="flex justify-between">
-            <span className="text-xs">Max Quantity</span>
-            <span className="text-xs">{maxBuyable.toFixed(4)}</span>
+            <span className="text-xs">{t('frozenCash')}</span>
+            <span className="text-xs text-orange-500">{currencySymbol}{frozenCash.toFixed(2)}</span>
           </div>
-        )}
-      </div>
+          {(side === 'SELL' || side === 'BUY') && (
+            <div className="flex justify-between">
+              <span className="text-xs">{t('availablePosition')}</span>
+              <span className="text-xs text-purple-500">{positionAvailable}</span>
+            </div>
+          )}
+          {(side === 'LONG' || side === 'SHORT') && (
+            <div className="flex justify-between">
+              <span className="text-xs">{t('maxQuantity')}</span>
+              <span className="text-xs">{maxBuyable.toFixed(4)}</span>
+            </div>
+          )}
+        </div>
 
       {/* Place Order button */}
       <div className="pt-4">
