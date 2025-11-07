@@ -59,10 +59,10 @@ export default function TradeButtons({
     : Math.floor(availableCash / Math.max(effectivePrice || 0, 0.0001)) || 0
   
   // Determine button text and color based on side
-  const buttonText = side === 'LONG' ? 'Open Long' 
-    : side === 'SHORT' ? 'Open Short'
-    : side === 'BUY' ? 'Close Short'
-    : 'Close Long'
+  const buttonText = side === 'LONG' ? t('longOpen')
+    : side === 'SHORT' ? t('shortOpen')
+    : side === 'BUY' ? t('shortClose')
+    : t('longClose')
   
   const buttonColor = (side === 'LONG' || side === 'BUY') 
     ? 'bg-green-600 hover:bg-green-500' 

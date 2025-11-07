@@ -1,6 +1,7 @@
 import React from 'react'
 import { Button } from '@/components/ui/button'
 import { toast } from 'react-hot-toast'
+import { useLanguage } from '@/contexts/LanguageContext'
 
 interface User {
   current_cash: number
@@ -33,6 +34,7 @@ export default function AuthDialog({
   onAuthenticate,
   orderData
 }: AuthDialogProps) {
+  const { t } = useLanguage()
 
   const handleConfirmTrade = () => {
     if (!pendingTrade) return
@@ -57,7 +59,7 @@ export default function AuthDialog({
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
       <div className="bg-background rounded-lg p-6 w-80 max-w-sm mx-4">
         <h3 className="text-lg font-semibold mb-4">
-          Confirm Trade - {pendingTrade?.side === 'BUY' ? 'Buy' : 'Sell'}
+          {t('confirm')} - {pendingTrade?.side === 'BUY' ? t('buy') : t('sell')}
         </h3>
         
         <div className="space-y-4">
@@ -80,13 +82,13 @@ export default function AuthDialog({
               onClick={onClose}
               className="flex-1"
             >
-              Cancel
+              {t('cancel')}
             </Button>
             <Button
               onClick={handleConfirmTrade}
               className="flex-1"
             >
-              Confirm Trade
+              {t('confirm')}
             </Button>
           </div>
         </div>
