@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from '@/components/ui/select'
+import { useLanguage } from '@/contexts/LanguageContext'
 import { getCryptoSymbols, getPopularCryptos } from '../../lib/api'
 
 interface CryptoInfo {
@@ -117,17 +118,19 @@ export default function OrderForm({
       ).slice(0, 10) // Limit to 10 results
     : popularCryptos.map(c => c.symbol).slice(0, 6) // Show top 6 popular when no search
 
+  const { t } = useLanguage()
+
   return (
     <div className="space-y-4">
       {/* Symbol */}
       <div className="space-y-2">
-        <label className="text-xs">Code</label>
+        <label className="text-xs">{t('code')}</label>
         <div className="relative" ref={dropdownRef}>
           <Input 
             value={searchTerm || symbol}
             onChange={(e) => handleSearchChange(e.target.value)}
             onFocus={() => setShowDropdown(true)}
-            placeholder="Search crypto symbols..."
+            placeholder={t('searchCrypto')}
           />
           
           {/* Dropdown */}
@@ -180,7 +183,7 @@ export default function OrderForm({
       {/* 订单类型 */}
       <div className="space-y-2">
         <div className="flex items-center gap-1">
-          <label className="text-xs text-muted-foreground">Order Type</label>
+          <label className="text-xs text-muted-foreground">{t('orderType')}</label>
           <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-info w-3 h-3 text-muted-foreground">
             <circle cx="12" cy="12" r="10"></circle>
             <path d="M12 16v-4"></path>
@@ -192,15 +195,15 @@ export default function OrderForm({
             <SelectValue />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="LIMIT">Limit Order</SelectItem>
-            <SelectItem value="MARKET">Market Order</SelectItem>
+            <SelectItem value="LIMIT">{t('limitOrder')}</SelectItem>
+            <SelectItem value="MARKET">{t('marketOrder')}</SelectItem>
           </SelectContent>
         </Select>
       </div>
 
       {/* 价格 */}
       <div className="space-y-2">
-        <label className="text-xs">Price</label>
+        <label className="text-xs">{t('price')}</label>
         <div className="flex items-center gap-2">
          <Button 
             onClick={() => onAdjustPrice(-0.01)}
@@ -230,7 +233,7 @@ export default function OrderForm({
 
       {/* 数量 */}
       <div className="space-y-2">
-        <label className="text-xs">Quantity</label>
+        <label className="text-xs">{t('quantity')}</label>
         <div className="flex items-center gap-2">
           <Button 
             onClick={() => onAdjustQuantity(-1)}
@@ -259,7 +262,7 @@ export default function OrderForm({
       {onLeverageChange && (
         <div className="space-y-2">
           <div className="flex items-center gap-1">
-            <label className="text-xs text-muted-foreground">Leverage</label>
+            <label className="text-xs text-muted-foreground">{t('leverage')}</label>
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-info w-3 h-3 text-muted-foreground">
               <circle cx="12" cy="12" r="10"></circle>
               <path d="M12 16v-4"></path>
@@ -301,24 +304,24 @@ export default function OrderForm({
       {onSideChange && (
         <div className="space-y-2">
           <div className="flex items-center gap-1">
-            <label className="text-xs text-muted-foreground">Side</label>
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-info w-3 h-3 text-muted-foreground">
-              <circle cx="12" cy="12" r="10"></circle>
-              <path d="M12 16v-4"></path>
-              <path d="M12 8h.01"></path>
-            </svg>
-          </div>
-          <Select value={side} onValueChange={(v) => onSideChange(v as 'LONG' | 'SHORT' | 'BUY' | 'SELL')}>
-            <SelectTrigger className="bg-input text-xs h-6">
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="LONG">Long (Open)</SelectItem>
-              <SelectItem value="SHORT">Short (Open)</SelectItem>
-              <SelectItem value="SELL">Sell (Close Long)</SelectItem>
-              <SelectItem value="BUY">Buy (Close Short)</SelectItem>
-            </SelectContent>
-          </Select>
+          <label className="text-xs text-muted-foreground">{t('side')}</label>
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-info w-3 h-3 text-muted-foreground">
+            <circle cx="12" cy="12" r="10"></circle>
+            <path d="M12 16v-4"></path>
+            <path d="M12 8h.01"></path>
+          </svg>
+        </div>
+        <Select value={side} onValueChange={(v) => onSideChange(v as 'LONG' | 'SHORT' | 'BUY' | 'SELL')}>
+          <SelectTrigger className="bg-input text-xs h-6">
+            <SelectValue />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="LONG">{t('longOpen')}</SelectItem>
+            <SelectItem value="SHORT">{t('shortOpen')}</SelectItem>
+            <SelectItem value="SELL">{t('longClose')}</SelectItem>
+            <SelectItem value="BUY">{t('shortClose')}</SelectItem>
+          </SelectContent>
+        </Select>
         </div>
       )}
     </div>

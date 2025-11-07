@@ -88,6 +88,28 @@ export const translations = {
     invalidQuantity: '请输入有效的数量',
     insufficientCash: '资金不足，需要',
     insufficientPosition: '持仓不足',
+
+    // Portfolio specific
+    totalExposure: '总敞口',
+    prevPercent: '原比例 %',
+    targetPercent: '目标比例 %',
+    balance: '余额',
+    executed: '已执行',
+    reason: '原因',
+    orderNo: '订单号',
+    avgCost: '平均成本',
+    lastPrice: '最新价格',
+    noReason: '无原因说明',
+    yes: '是',
+    no: '否',
+
+    code: '代码',
+    orderType: '订单类型',
+    searchCrypto: '搜索加密货币...',
+    longOpen: '多头开仓',
+    shortOpen: '空头开仓',
+    longClose: '多头平仓',
+    shortClose: '空头平仓',
     
     // Settings Dialog - Account Management
     accountManagement: '模型管理',
@@ -200,6 +222,29 @@ export const translations = {
     invalidQuantity: 'Please input a valid quantity',
     insufficientCash: 'Insufficient cash. Need',
     insufficientPosition: 'Insufficient position to close',
+    
+    // Portfolio specific
+    totalExposure: 'Total Exposure',
+    prevPercent: 'Prev %',
+    targetPercent: 'Target %',
+    balance: 'Balance',
+    executed: 'Executed',
+    reason: 'Reason',
+    orderNo: 'Order No',
+    avgCost: 'Avg Cost',
+    lastPrice: 'Last Price',
+    noReason: 'No reason provided',
+    yes: 'Yes',
+    no: 'No',
+    
+    // Trading Form Fields
+    code: 'Code',
+    orderType: 'Order Type',
+    searchCrypto: 'Search crypto symbols...',
+    longOpen: 'Long (Open)',
+    shortOpen: 'Short (Open)',
+    longClose: 'Long (Close)',
+    shortClose: 'Short (Close)',
     
     // Settings Dialog - Account Management
     accountManagement: 'Account Management',

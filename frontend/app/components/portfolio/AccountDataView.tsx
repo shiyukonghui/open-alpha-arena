@@ -248,7 +248,7 @@ function OrderBook({ orders, onCancelOrder, t }: { orders: Order[], onCancelOrde
         <TableHeader>
           <TableRow>
             <TableHead>{t('time')}</TableHead>
-            <TableHead>Order No</TableHead>
+            <TableHead>{t('orderNo')}</TableHead>
             <TableHead>{t('symbol')}</TableHead>
             <TableHead>{t('side')}</TableHead>
             <TableHead>{t('type')}</TableHead>
@@ -407,7 +407,7 @@ function AIDecisionLog({ aiDecisions, t }: { aiDecisions: AIDecision[], t: any }
                 <span className={`px-2 py-1 rounded text-xs font-medium ${
                   decision.executed === 'true' ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800'
                 }`}>
-                  {decision.executed === 'true' ? 'Yes' : 'No'}
+                  {decision.executed === 'true' ? t('yes') : t('no')}
                 </span>
               </TableCell>
               <TableCell className="max-w-xs">
@@ -415,11 +415,11 @@ function AIDecisionLog({ aiDecisions, t }: { aiDecisions: AIDecision[], t: any }
                   <Tooltip>
                     <TooltipTrigger asChild>
                       <div className="truncate max-w-[200px]">
-                        {decision.reason || 'No reason provided'}
+                        {decision.reason || t('noReason')}
                       </div>
                     </TooltipTrigger>
                     <TooltipContent className="max-w-md p-4 whitespace-pre-wrap">
-                      {decision.reason || 'No reason provided'}
+                      {decision.reason || t('noReason')}
                     </TooltipContent>
                   </Tooltip>
                 </TooltipProvider>
