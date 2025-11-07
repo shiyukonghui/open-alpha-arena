@@ -64,17 +64,12 @@ export default function AuthDialog({
         
         <div className="space-y-4">
           <div className="text-xs text-muted-foreground">
-            <p><strong>Symbol:</strong> {orderData.symbol}</p>
-            <p><strong>Type:</strong> {orderData.order_type}</p>
-            <p><strong>Quantity:</strong> {orderData.quantity}</p>
-            {orderData.price && <p><strong>Price:</strong> ${orderData.price}</p>}
+            <p><strong>{t('symbol')}:</strong> {orderData.symbol}</p>
+            <p><strong>{t('type')}:</strong> {orderData.order_type === 'LIMIT' ? t('limitOrder') : t('marketOrder')}</p>
+            <p><strong>{t('quantity')}:</strong> {orderData.quantity}</p>
+            {orderData.price && <p><strong>{t('price')}:</strong> ${orderData.price}</p>}
           </div>
 
-          <div className="bg-blue-50 dark:bg-blue-950 p-3 rounded">
-            <p className="text-xs text-blue-700 dark:text-blue-300">
-              📄 Paper Trading Mode - No real money involved
-            </p>
-          </div>
 
           <div className="flex gap-3 pt-2">
             <Button
