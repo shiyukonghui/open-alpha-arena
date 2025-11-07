@@ -1,9 +1,8 @@
 # Open Alpha Arena
 
-<img width="3840" height="1498" alt="image" src="https://github.com/user-attachments/assets/dac4b5d1-3da7-4b54-97e5-cef226d99547" />
+# Open Alpha Arena
 
-<img width="2882" height="1792" alt="image" src="https://github.com/user-attachments/assets/66a5283b-3761-4992-82d1-8cd01f4d518d" />
-
+## 简介
 这是一个受[nof1 Alpha Arena](https://nof1.ai)启发的项目，您可以在加密货币市场设置AI交易机器人。
 
 已完成：
@@ -15,15 +14,6 @@
 待办：
 - 实盘交易
 
-## 星标历史
-
-<a href="https://www.star-history.com/#etrobot/open-alpha-arena&type=date&legend=top-left">
- <picture>
-   <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/svg?repos=etrobot/open-alpha-arena&type=date&theme=dark&legend=top-left" />
-   <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/svg?repos=etrobot/open-alpha-arena&type=date&legend=top-left" />
-   <img alt="Star History Chart" src="https://api.star-history.com/svg?repos=etrobot/open-alpha-arena&type=date&legend=top-left" />
- </picture>
-</a>
 
 ## 开始使用
 
