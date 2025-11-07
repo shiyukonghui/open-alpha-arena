@@ -69,8 +69,6 @@ export const translations = {
     // Trading Info/Stats
     notionalValue: '名义价值',
     marginRequired: '所需保证金',
-    availableCash: '可用资金',
-    frozenCash: '冻结资金',
     availablePosition: '可用仓位',
     maxQuantity: '最大数量',
     
@@ -183,8 +181,6 @@ export const translations = {
     // Trading Info/Stats
     notionalValue: 'Notional Value',
     marginRequired: 'Margin Required',
-    availableCash: 'Available Cash',
-    frozenCash: 'Frozen Cash',
     availablePosition: 'Available Position',
     maxQuantity: 'Max Quantity',
     
