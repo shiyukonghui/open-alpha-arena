@@ -273,7 +273,6 @@ export default function OrderForm({
             <Button 
               onClick={() => onLeverageChange(Math.max(1, leverage - 1))}
               variant="outline"
-              size="sm"
             >
               -
             </Button>
@@ -291,11 +290,9 @@ export default function OrderForm({
             <Button 
               onClick={() => onLeverageChange(Math.min(50, leverage + 1))}
               variant="outline"
-              size="sm"
             >
               +
             </Button>
-            <span className="text-xs text-muted-foreground min-w-[20px]">x</span>
           </div>
         </div>
       )}
